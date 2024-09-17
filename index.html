@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Work Practice Interest Self-Assessment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .rating {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+        .rating label {
+            flex: 1;
+            text-align: center;
+        }
+        .rating input {
+            margin: 0 auto;
+            display: block;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #e9e9e9;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Social Work Practice Interest Self-Assessment</h1>
+        <p>Rate your interest in each area from 1 (less interested) to 5 (more interested)</p>
+        <form id="assessment-form">
+            <!-- Questions will be dynamically added here -->
+        </form>
+        <button onclick="calculateResults()">Calculate Results</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const questions = [
+            "One-on-one counseling",
+            "Public speaking",
+            "Data analysis and interpretation",
+            "Crisis intervention",
+            "Reading and analyzing complex ideas",
+            "Family therapy",
+            "Community organizing",
+            "Case management",
+            "Grant writing",
+            "Developing cultural competence",
+            "Program evaluation",
+            "Motivational interviewing",
+            "Policy analysis",
+            "Group therapy facilitation",
+            "Research design",
+            "Advocacy",
+            "Project management",
+            "Trauma-informed care",
+            "Budgeting and financial management",
+            "Ethical decision-making",
+            "Intervention/treatment program design",
+            "Interviewing skills",
+            "Social policy development",
+            "Cognitive Behavioral Therapy",
+            "Community needs assessment",
+            "Crisis management",
+            "Substance abuse counseling",
+            "Social justice advocacy",
+            "Child welfare case work",
+            "Nonprofit leadership"
+        ];
+
+        const form = document.getElementById('assessment-form');
+
+        questions.forEach((question, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+            questionDiv.innerHTML = `
+                <p>${index + 1}. ${question}</p>
+                <div class="rating">
+                    ${[1, 2, 3, 4, 5].map(value => `
+                        <label>
+                            ${value}
+                            <input type="radio" name="q${index}" value="${value}" required>
+                        </label>
+                    `).join('')}
+                </div>
+            `;
+            form.appendChild(questionDiv);
+        });
+
+        function calculateResults() {
+            const results = [];
+            questions.forEach((_, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected) {
+                    results.push({
+                        question: questions[index],
+                        score: parseInt(selected.value)
+                    });
+                }
+            });
+
+            results.sort((a, b) => b.score - a.score);
+
+            const topInterests = results.slice(0, 5);
+            const lowInterests = results.slice(-3);
+
+            let resultsHtml = '<h2>Results</h2>';
+            resultsHtml += '<h3>Top 5 areas of interest:</h3>';
+            resultsHtml += '<ol>' + topInterests.map(item => `<li>${item.question} (Score: ${item.score})</li>`).join('') + '</ol>';
+
+            resultsHtml += '<h3>Areas for potential exploration:</h3>';
+            resultsHtml += '<ol>' + lowInterests.map(item => `<li>${item.question} (Score: ${item.score})</li>`).join('') + '</ol>';
+
+            document.getElementById('results').innerHTML = resultsHtml;
+        }
+    </script>
+</body>
+</html>
